@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-	background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("/bg.png");
+	background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("/view-three-dimensional-tree.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
@@ -11,20 +11,22 @@ body {
 
 /* dark mode looking scrollbar */
 ::-webkit-scrollbar {
-	width: 8px;
+	cursor: pointer;
+	width: 8px !important;
 }
 
 ::-webkit-scrollbar-track {
-	background: #555;
+	cursor: pointer;
+	background: #555 !important;
 }
 
 ::-webkit-scrollbar-thumb {
-	background: #121212;
-	border-radius: 5px;
+	background: #846565 !important;
+	border-radius: 5px !important;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #242424;
+	background: #242424 !important;
 }
 
 /* SHAKE ANIMATION ON HORIZONTAL DIRECTION */

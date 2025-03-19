@@ -33,7 +33,7 @@ const MessageInput = () => {
 				/>
 				<button
 					type='button'
-					className='absolute inset-y-0 right-9 flex items-center pl-3'
+					className='absolute inset-y-0 right-11 flex items-center pl-3'
 					onClick={() => setShowEmojiPicker(!showEmojiPicker)}
 				>
 					<FaSmile className='text-gray-400 hover:text-white' />
