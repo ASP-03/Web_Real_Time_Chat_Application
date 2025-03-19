@@ -69,7 +69,7 @@ npm run build
 - Render: Render deploy
 - Netlify: Push to GitHub and connect with Netlify
 ## 🚀 Deployment (Backend)
--Render: Render deploy 
+- Render: Render deploy 
 
 
 ![Screenshot 2025-03-14 172117](https://github.com/user-attachments/assets/33ce6570-ffcb-4570-9f64-aa3a474ef903)
