@@ -66,10 +66,10 @@ npm start
 npm run build
 ```
 ## 🚀 Deployment (Frontend)
-- Vercel: vercel deploy
+- Render: Render deploy
 - Netlify: Push to GitHub and connect with Netlify
 ## 🚀 Deployment (Backend)
--Render / Railway / VPS
+-Render: Render deploy 
 
 
 ![Screenshot 2025-03-14 172117](https://github.com/user-attachments/assets/33ce6570-ffcb-4570-9f64-aa3a474ef903)
