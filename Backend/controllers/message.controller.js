@@ -22,28 +22,60 @@ export const sendMessage = async (req, res) => {
 			senderId,
 			receiverId,
 			message,
+			status: 'sent'
 		});
 
 		if (newMessage) {
 			conversation.messages.push(newMessage._id);
 		}
 
-		// await conversation.save();
-		// await newMessage.save();
-
-		// this will run in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
 
-		// SOCKET IO FUNCTIONALITY WILL GO HERE
 		const receiverSocketId = getReceiverSocketId(receiverId);
 		if (receiverSocketId) {
-			// io.to(<socket_id>).emit() used to send events to specific client
+			// Update message status to delivered when receiver is online
+			newMessage.status = 'delivered';
+			await newMessage.save();
+			
 			io.to(receiverSocketId).emit("newMessage", newMessage);
+			// Notify sender that message was delivered
+			io.to(req.socket.id).emit("messageDelivered", { messageId: newMessage._id });
 		}
 
 		res.status(201).json(newMessage);
 	} catch (error) {
 		console.log("Error in sendMessage controller: ", error.message);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+export const markMessageAsRead = async (req, res) => {
+	try {
+		const { messageId } = req.params;
+		const userId = req.user._id;
+
+		const message = await Message.findById(messageId);
+		if (!message) {
+			return res.status(404).json({ error: "Message not found" });
+		}
+
+		// Only the receiver can mark messages as read
+		if (message.receiverId.toString() !== userId.toString()) {
+			return res.status(403).json({ error: "Unauthorized" });
+		}
+
+		message.status = 'read';
+		await message.save();
+
+		// Notify sender that message was read
+		const senderSocketId = getReceiverSocketId(message.senderId);
+		if (senderSocketId) {
+			io.to(senderSocketId).emit("messageRead", { messageId: message._id });
+		}
+
+		res.status(200).json({ message: "Message marked as read" });
+	} catch (error) {
+		console.log("Error in markMessageAsRead controller: ", error.message);
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
