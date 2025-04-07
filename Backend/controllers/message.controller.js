@@ -53,13 +53,21 @@ export const getMessages = async (req, res) => {
 		const { id: userToChatId } = req.params;
 		const senderId = req.user._id;
 
+		// Ensure we're only getting messages from the specific conversation
 		const conversation = await Conversation.findOne({
 			participants: { $all: [senderId, userToChatId] },
+			$and: [
+				{ participants: { $size: 2 } } // Ensure it's a one-on-one conversation
+			]
 		}).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
 
 		if (!conversation) return res.status(200).json([]);
 
-		const messages = conversation.messages;
+		// Filter messages to ensure they're only between these two users
+		const messages = conversation.messages.filter(msg => 
+			(msg.senderId.toString() === senderId.toString() && msg.receiverId.toString() === userToChatId.toString()) ||
+			(msg.senderId.toString() === userToChatId.toString() && msg.receiverId.toString() === senderId.toString())
+		);
 
 		res.status(200).json(messages);
 	} catch (error) {
